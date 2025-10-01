@@ -1,0 +1,145 @@
+services:
+  db:
+    image: postgres:17
+    shm_size: "2g"
+    deploy:
+      resources:
+        reservations:
+          memory: 4G
+        limits:
+          memory: 8G
+    environment:
+      POSTGRES_USER: odoo
+      POSTGRES_PASSWORD: odoo19@2025
+      POSTGRES_DB: postgres
+      POSTGRES_INITDB_ARGS: "--encoding=UTF-8 --lc-collate=C --lc-ctype=C"
+    restart: always
+    volumes:
+      - ./postgresql:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U odoo -d postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    command: >
+      postgres
+      -c max_connections=200
+      -c shared_buffers=256MB
+      -c effective_cache_size=1GB
+      -c maintenance_work_mem=64MB
+      -c checkpoint_completion_target=0.9
+      -c wal_buffers=16MB
+      -c default_statistics_target=100
+
+  odoo19:
+    image: odoo:19
+    shm_size: "4g"
+    deploy:
+      resources:
+        reservations:
+          memory: 3G 
+        limits:
+          memory: 6G
+    depends_on:
+      pgbouncer:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    ports:
+      - "10019:8069"
+      - "20019:8072"
+    tty: true
+    command: odoo
+    environment:
+      HOST: pgbouncer
+      USER: odoo
+      PASSWORD: odoo19@2025
+      REDIS_URL: redis://redis:6379/0
+    volumes:
+      - ./addons:/mnt/extra-addons
+      - ./enterprise:/mnt/enterprise-addons
+      - ./etc:/etc/odoo
+      - ./sessions:/var/lib/odoo/sessions
+      - ./filestore:/var/lib/odoo/filestore
+    restart: always
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8069/web/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  pgbouncer:
+    image: edoburu/pgbouncer
+    shm_size: "1g"
+    deploy:
+      resources:
+        reservations:
+          memory: 256M  
+        limits:
+          memory: 512M
+    environment:
+      DB_HOST: db
+      DATABASES: "odoo=host=db port=5432 dbname=postgres user=odoo password=odoo19@2025"
+      AUTH_FILE: "/etc/pgbouncer/userlist.txt"
+      POOL_MODE: "session"
+      MAX_CLIENT_CONN: "200"
+      DEFAULT_POOL_SIZE: "50"
+      LISTEN_PORT: "6432"
+      SERVER_RESET_QUERY: "DISCARD ALL"
+      SERVER_CHECK_QUERY: "SELECT 1"
+      SERVER_CHECK_DELAY: "30"
+    volumes:
+      - ./pgbouncer/userlist.txt:/etc/pgbouncer/userlist.txt
+    ports:
+      - "6439:6432"
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-U", "odoo", "-d", "postgres", "-h", "localhost", "-p", "6432" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    shm_size: "1g"
+    deploy:
+      resources:
+        reservations:
+          memory: 512M 
+        limits:
+          memory: 2G
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    ports:
+      - "6389:6379"
+    command: >
+      redis-server
+      --save 900 1
+      --save 300 10
+      --save 60 10000
+      --loglevel warning
+      --maxmemory 1gb
+      --maxmemory-policy allkeys-lru
+      --appendonly yes
+      --appendfsync everysec
+    volumes:
+      - ./redis-data:/data
+    restart: always
+
+networks:
+  default:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+
+volumes:
+  postgresql:
+    driver: local
+  redis-data:
+    driver: local

@@ -1,0 +1,316 @@
+# Odoo 19 Enterprise Docker Setup - Git Ignore File
+
+# =============================================================================
+# ENVIRONMENT AND CONFIGURATION FILES
+# =============================================================================
+
+# Environment files
+.env
+.env.local
+.env.production
+.env.staging
+.env.development
+
+# Configuration backups
+*.conf.bak
+*.conf.backup
+
+# =============================================================================
+# ODOO DATA DIRECTORIES
+# =============================================================================
+
+# PostgreSQL data
+postgresql/
+postgres-data/
+db-data/
+
+# Odoo filestore
+filestore/
+data/
+
+# Session data
+sessions/
+
+# Redis data
+redis-data/
+redis/
+
+# Logs
+logs/
+*.log
+
+# =============================================================================
+# BACKUP FILES
+# =============================================================================
+
+# Database backups
+*.sql
+*.dump
+*.backup
+
+# Archive backups
+*.tar.gz
+*.tar.bz2
+*.zip
+*.rar
+
+# Backup directories
+backups/
+backup/
+
+# =============================================================================
+# ENTERPRISE AND LICENSE FILES
+# =============================================================================
+
+# Enterprise license files
+enterprise_license.txt
+license.txt
+*.license
+odoo_enterprise.zip
+
+# Enterprise addon downloads (managed automatically)
+enterprise-addons/
+enterprise/web_enterprise/
+enterprise/web_studio/
+
+# =============================================================================
+# CUSTOM ADDONS (optional - depends on your workflow)
+# =============================================================================
+
+# Uncomment if you want to ignore custom addons
+# addons/
+# custom-addons/
+
+# But keep the README files
+!addons/README.md
+!enterprise/README.md
+
+# =============================================================================
+# DOCKER AND CONTAINER FILES
+# =============================================================================
+
+# Docker volumes
+volumes/
+
+# Docker override files
+docker-compose.override.yml
+docker-compose.local.yml
+docker-compose.production.yml
+
+# =============================================================================
+# TEMPORARY AND CACHE FILES
+# =============================================================================
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Temporary files
+*.tmp
+*.temp
+.tmp/
+temp/
+
+# Cache directories
+.cache/
+cache/
+
+# =============================================================================
+# IDE AND EDITOR FILES
+# =============================================================================
+
+# VSCode
+.vscode/
+*.code-workspace
+
+# PyCharm
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Vim
+*.swp
+*.swo
+*~
+
+# Emacs
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+*.elc
+auto-save-list
+tramp
+.\#*
+
+# =============================================================================
+# OPERATING SYSTEM FILES
+# =============================================================================
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msm
+*.msp
+*.lnk
+
+# Linux
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
+
+# =============================================================================
+# SSL/TLS CERTIFICATES
+# =============================================================================
+
+# SSL certificates and keys
+*.pem
+*.key
+*.crt
+*.csr
+*.p12
+*.pfx
+ssl/
+certs/
+certificates/
+
+# =============================================================================
+# MONITORING AND METRICS
+# =============================================================================
+
+# Prometheus data
+prometheus-data/
+
+# Grafana data
+grafana-data/
+
+# Monitoring logs
+monitoring/
+
+# =============================================================================
+# DEVELOPMENT AND TESTING
+# =============================================================================
+
+# Test databases
+test_*.sql
+*_test.sql
+
+# Development files
+dev/
+development/
+.dev/
+
+# Testing artifacts
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+
+# =============================================================================
+# DEPLOYMENT FILES
+# =============================================================================
+
+# Deployment scripts (if sensitive)
+deploy.sh
+deployment/
+
+# Kubernetes files (if they contain secrets)
+k8s/
+kubernetes/
+
+# Terraform files
+*.tfstate
+*.tfstate.*
+.terraform/
+
+# =============================================================================
+# DOCUMENTATION BUILD FILES
+# =============================================================================
+
+# Sphinx documentation
+docs/_build/
+docs/build/
+
+# MkDocs
+site/
+
+# =============================================================================
+# PACKAGE MANAGERS
+# =============================================================================
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Python
+pip-log.txt
+pip-delete-this-directory.txt
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+
+# =============================================================================
+# CUSTOM IGNORE PATTERNS
+# =============================================================================
+
+# Add your custom ignore patterns here
+# custom-directory/
+# *.custom
+
+# =============================================================================
+# SECURITY SENSITIVE FILES
+# =============================================================================
+
+# API keys and secrets
+secrets/
+.secrets
+api-keys.txt
+credentials.json
+
+# Private keys
+private/
+*.private
+
+# =============================================================================
+# NOTES
+# =============================================================================
+
+# This .gitignore file is designed for Odoo 19 Enterprise Docker setups
+# Customize it according to your specific needs and security requirements
+# Always review before committing to ensure no sensitive data is included
+# Consider using git-secrets or similar tools for additional protection
