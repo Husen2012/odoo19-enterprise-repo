@@ -37,7 +37,7 @@ services:
     deploy:
       resources:
         reservations:
-          memory: 3G 
+          memory: 3G
         limits:
           memory: 6G
     depends_on:
@@ -61,6 +61,7 @@ services:
       - ./etc:/etc/odoo
       - ./sessions:/var/lib/odoo/sessions
       - ./filestore:/var/lib/odoo/filestore
+      - ./ssl:/etc/ssl/odoo:ro  # SSL certificates mount point
     restart: always
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8069/web/health"]

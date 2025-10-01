@@ -38,6 +38,16 @@ chmod +x run.sh
 sudo ./run.sh odoo19-ent 10019 20019 6389 6439
 ```
 
+### Remote Server Deployment
+
+```bash
+# Deploy to remote server
+./deploy-to-server.sh <server_ip> <username> <password> <instance_name> <main_port> <longpolling_port>
+
+# Example:
+./deploy-to-server.sh 31.220.79.196 root password123 odoo19-ent 10019 20019 6389 6439
+```
+
 ## 📋 Usage Examples
 
 ### Basic Usage (Default Redis and pgbouncer ports)
